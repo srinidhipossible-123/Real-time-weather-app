@@ -1,175 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkySense: An Intelligent Weather Companion</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkySense: An Intelligent Weather Companion</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" crossorigin href="/Real-time-weather-app/assets/index-Df71PuJd.css">
+</head>
 
-    <!-- Boxicons -->
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+<body>
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-logo">
+      <i class='bx bx-cloud'></i>
+      <h1>SkySense</h1>
+      <p data-translate="splash-subtitle">An Intelligent Weather Companion</p>
+    </div>
+    <div class="splash-clouds">
+      <div class="splash-cloud"></div>
+      <div class="splash-cloud"></div>
+    </div>
+  </div>
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div id="animation-layer"></div>
 
-    <!-- Vite Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <div class="top-controls">
+    <button id="themeToggle" class="control-btn" data-translate-title="toggle-theme"><i class='bx bx-moon'></i></button>
+    <button id="modeToggle" class="control-btn" data-translate-title="toggle-mode"><i class='bx bx-layout'></i></button>
+    <button id="chatToggle" class="control-btn" data-translate-title="toggle-chat"><i class='bx bx-bot'></i></button>
+    <select id="languageSelect" title="Language">
+      <option value="en">🇬🇧 EN</option>
+      <option value="hi">🇮🇳 HI</option>
+      <option value="fr">🇫🇷 FR</option>
+      <option value="es">🇪🇸 ES</option>
+      <option value="ar">🇸🇦 AR</option>
+      <option value="de">🇩🇪 DE</option>
+      <option value="ja">🇯🇵 JA</option>
+      <option value="zh">🇨🇳 ZH</option>
+    </select>
+  </div>
 
-    <!-- Styles (Vite will inject Tailwind automatically) -->
-    <script type="module" crossorigin src="/Real-time-weather-app/assets/index-DlGgIFZL.js"></script>
-    <link rel="stylesheet" crossorigin href="/Real-time-weather-app/assets/index-Df71PuJd.css">
-  </head>
+  <div class="container" id="weatherContainer">
+    <h2><i class='bx bx-cloud'></i> <span data-translate="app-name">SkySense</span></h2>
+    <p class="tagline" data-translate="app-tagline">An Intelligent Weather Companion</p>
 
-  <body>
-    <!-- Splash screen -->
-    <div id="splashScreen" class="splash-screen">
-      <div class="splash-logo">
-        <i class="bx bx-cloud"></i>
-        <h1>SkySense</h1>
-        <p data-translate="splash-subtitle">An Intelligent Weather Companion</p>
+    <div class="search-box">
+      <i class='bx bx-current-location location-icon'></i>
+      <input type="text" id="cityInput" data-translate-placeholder="search-placeholder">
+      <button id="searchBtn"><i class='bx bx-search search-icon'></i></button>
+      <button id="voiceBtn" data-translate-title="voice-search"><i class='bx bx-microphone'></i></button>
+    </div>
+
+    <div class="weather-box">
+      <img id="weatherIcon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FFD43B'/%3E%3C/svg%3E" alt="Weather icon">
+      <p class="temperature" id="temperature">--°C</p>
+      <p class="description" id="description" data-translate="fetching">Fetching your sky...</p>
+      <p id="comfortMeter">😐 <span data-translate="comfort-normal">Normal</span></p>
+    </div>
+
+    <div class="extra-details">
+      <p id="feelsLike"><span data-translate="feels-like">Feels like</span>: --°C</p>
+      <p id="sunTime">☀️ <span data-translate="sunrise">Sunrise</span>: -- | 🌙 <span data-translate="sunset">Sunset</span>: --</p>
+    </div>
+
+    <div class="weather-details">
+      <div class="humidity">
+        <i class='bx bx-water'></i>
+        <div><span id="humidity">--%</span><p data-translate="humidity">Humidity</p></div>
       </div>
-      <div class="splash-clouds">
-        <div class="splash-cloud"></div>
-        <div class="splash-cloud"></div>
+      <div class="wind">
+        <i class='bx bx-wind'></i>
+        <div><span id="wind">-- km/h</span><p data-translate="wind">Wind</p></div>
+      </div>
+      <div class="pressure">
+        <i class='bx bx-tachometer'></i>
+        <div><span id="pressure">-- hPa</span><p data-translate="pressure">Pressure</p></div>
+      </div>
+      <div class="visibility">
+        <i class='bx bx-show'></i>
+        <div><span id="visibility">-- km</span><p data-translate="visibility">Visibility</p></div>
       </div>
     </div>
 
-    <div id="animation-layer"></div>
-
-    <!-- Top controls -->
-    <div class="top-controls">
-      <button
-        id="themeToggle"
-        class="control-btn"
-        data-translate-title="toggle-theme"
-      >
-        <i class="bx bx-moon"></i>
-      </button>
-      <button
-        id="modeToggle"
-        class="control-btn"
-        data-translate-title="toggle-mode"
-      >
-        <i class="bx bx-layout"></i>
-      </button>
-      <button
-        id="chatToggle"
-        class="control-btn"
-        data-translate-title="toggle-chat"
-      >
-        <i class="bx bx-bot"></i>
-      </button>
-      <select id="languageSelect" title="Language">
-        <option value="en">🇬🇧 EN</option>
-        <option value="hi">🇮🇳 HI</option>
-        <option value="fr">🇫🇷 FR</option>
-        <option value="es">🇪🇸 ES</option>
-        <option value="ar">🇸🇦 AR</option>
-        <option value="de">🇩🇪 DE</option>
-        <option value="ja">🇯🇵 JA</option>
-        <option value="zh">🇨🇳 ZH</option>
-      </select>
+    <div class="forecast-section">
+      <h3 data-translate="next-hours">Next 12 Hours</h3>
+      <div class="forecast-container" id="hourlyForecast"></div>
     </div>
 
-    <!-- Weather container -->
-    <div class="container" id="weatherContainer">
-      <h2><i class="bx bx-cloud"></i> <span>SkySense</span></h2>
-      <p class="tagline">An Intelligent Weather Companion</p>
-
-      <!-- Search box -->
-      <div class="search-box">
-        <i class="bx bx-current-location location-icon"></i>
-        <input
-          type="text"
-          id="cityInput"
-          placeholder="Search city..."
-          data-translate-placeholder="search-placeholder"
-        />
-        <button id="searchBtn">
-          <i class="bx bx-search search-icon"></i>
-        </button>
-        <button id="voiceBtn" data-translate-title="voice-search">
-          <i class="bx bx-microphone"></i>
-        </button>
-      </div>
-
-      <!-- Weather info -->
-      <div class="weather-box">
-        <img
-          id="weatherIcon"
-          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FFD43B'/%3E%3C/svg%3E"
-          alt="Weather icon"
-        />
-        <p class="temperature" id="temperature">--°C</p>
-        <p class="description" id="description" data-translate="fetching">
-          Fetching your sky...
-        </p>
-        <p id="comfortMeter">😐 <span>Normal</span></p>
-      </div>
-
-      <!-- Extra details -->
-      <div class="extra-details">
-        <p id="feelsLike">Feels like: --°C</p>
-        <p id="sunTime">☀️ Sunrise: -- | 🌙 Sunset: --</p>
-      </div>
-
-      <!-- Weather metrics -->
-      <div class="weather-details">
-        <div class="humidity">
-          <i class="bx bx-water"></i>
-          <div><span id="humidity">--%</span><p>Humidity</p></div>
-        </div>
-        <div class="wind">
-          <i class="bx bx-wind"></i>
-          <div><span id="wind">-- km/h</span><p>Wind</p></div>
-        </div>
-        <div class="pressure">
-          <i class="bx bx-tachometer"></i>
-          <div><span id="pressure">-- hPa</span><p>Pressure</p></div>
-        </div>
-        <div class="visibility">
-          <i class="bx bx-show"></i>
-          <div><span id="visibility">-- km</span><p>Visibility</p></div>
-        </div>
-      </div>
-
-      <!-- Forecast sections -->
-      <div class="forecast-section">
-        <h3>Next 12 Hours</h3>
-        <div class="forecast-container" id="hourlyForecast"></div>
-      </div>
-
-      <div class="forecast-section">
-        <h3>7-Day Forecast</h3>
-        <div class="forecast-container" id="weeklyForecast"></div>
-      </div>
+    <div class="forecast-section">
+      <h3 data-translate="seven-day">7-Day Forecast</h3>
+      <div class="forecast-container" id="weeklyForecast"></div>
     </div>
+  </div>
 
-    <!-- Chatbot -->
-    <div class="chatbot-container" id="chatbotContainer">
-      <div class="chatbot-header">
-        <div class="chatbot-title">
-          <i class="bx bx-bot"></i>
-          <span>Weather Assistant</span>
-        </div>
-        <button id="closeChatBtn"><i class="bx bx-x"></i></button>
+  <div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <i class='bx bx-bot'></i>
+        <span data-translate="chat-title">Weather Assistant</span>
       </div>
-      <div class="chatbot-messages" id="chatMessages"></div>
-      <div class="chatbot-input">
-        <input type="text" id="chatInput" placeholder="Ask something..." />
-        <button id="sendChatBtn"><i class="bx bx-send"></i></button>
-      </div>
+      <button id="closeChatBtn"><i class='bx bx-x'></i></button>
     </div>
+    <div class="chatbot-messages" id="chatMessages"></div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" data-translate-placeholder="chat-placeholder">
+      <button id="sendChatBtn"><i class='bx bx-send'></i></button>
+    </div>
+  </div>
 
-    <footer>
-      <p>© SkySense | Built with ❤️ & AI Intelligence</p>
-    </footer>
+  <footer>
+    <p>© <span data-translate="app-name">SkySense</span> | <span data-translate="footer-text">Built with ❤️ & AI Intelligence</span></p>
+  </footer>
 
-    <!-- Entry point for Vite -->
-
-    <!-- Optional: if you want to still run script.js logic -->
-    <!-- <script src="/src/script.js"></script> -->
-  </body>
+  <script src="src/script.js"></script>
+</body>
 </html>
